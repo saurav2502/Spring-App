@@ -1,0 +1,10 @@
+FROM openjdk:8 as build
+COPY target /home/app/target
+FROM openjdk:8-jre-slim
+
+ENV APP_HOME=/usr/local/lib
+WORKDIR $APP_HOME
+COPY --from=build /home/app/target/spring-app.jar $APP_HOME
+EXPOSE 8081 8000
+ADD entrypoint.sh $APP_HOME/entrypoint.sh
+ENTRYPOINT ["sh","/usr/local/lib/entrypoint.sh"]
